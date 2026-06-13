@@ -7,6 +7,14 @@ backend/.venv/
 .venv/
 **/__pycache__/
 *.pyc
+Lib/*
+Scripts/*
+pyvenv.cfg
+
+backend/.venv/Lib/*
+backend/.venv/Scripts/*
+backend/.venv/pyvenv.cfg
+
 
 # Node
 frontend/node_modules/
