@@ -5,6 +5,8 @@ backend/.env
 backend/misconceptai.db
 backend/.venv/
 .venv/
+**/__pycache__/
+*.pyc
 
 # Node
 frontend/node_modules/
