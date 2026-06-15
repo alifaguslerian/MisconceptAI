@@ -2,9 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import List
 
-from database import get_db
-from models import Session as SessionModel
-from schemas import SessionCreate, SessionResponse
+from backend.database import get_db
+from backend.models import Session as SessionModel
+from backend.schemas import SessionCreate, SessionResponse
 
 router = APIRouter(prefix="/sessions", tags=["sessions"])
 

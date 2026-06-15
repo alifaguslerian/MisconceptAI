@@ -2,8 +2,12 @@ import os
 import json
 import httpx
 from dotenv import load_dotenv
+from pathlib import Path
+import os
 
-load_dotenv()
+load_dotenv(Path(__file__).parent.parent / ".env")
+
+
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 GROQ_API_URL = "https://api.groq.com/openai/v1/chat/completions"

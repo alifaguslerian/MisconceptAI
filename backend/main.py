@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from database import engine, Base
-from routers import sessions, answers, analysis  # tambah analysis
+from backend.database import engine, Base
+from backend.routers import sessions, answers, analysis
 
 Base.metadata.create_all(bind=engine)
 
