@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from database import engine, Base
-from routers import sessions, answers  # tambah answers
+from routers import sessions, answers, analysis  # tambah analysis
 
 Base.metadata.create_all(bind=engine)
 
@@ -16,7 +16,8 @@ app.add_middleware(
 )
 
 app.include_router(sessions.router)
-app.include_router(answers.router)  # tambah ini
+app.include_router(answers.router)
+app.include_router(analysis.router)  # tambah ini
 
 
 @app.get("/")
