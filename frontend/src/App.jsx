@@ -1,122 +1,76 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import { BrowserRouter, Routes, Route, NavLink, useNavigate } from "react-router-dom"
+import { useEffect, useState } from "react"
+import axios from "axios"
+import SessionNew from "./pages/SessionNew"
+import SessionAnswers from "./pages/SessionAnswers"
+import SessionResults from "./pages/SessionResults"
 
-function App() {
-  const [count, setCount] = useState(0)
+const API = "http://localhost:8000"
+
+function Sidebar() {
+  const [sessions, setSessions] = useState([])
+
+  useEffect(() => {
+    axios.get(`${API}/sessions/`).then(r => setSessions(r.data))
+  }, [])
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
+    <aside className="w-64 h-screen fixed top-0 left-0 bg-surface border-r border-border flex flex-col">
+      <div className="px-5 py-4 border-b border-border">
+        <span className="font-sora font-bold text-accent text-lg tracking-tight">MisconceptAI</span>
+        <span className="block text-xs text-missing font-mono mt-0.5">diagnostic engine v0.1</span>
+      </div>
+
+      <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-1">
+        <p className="text-xs text-missing font-mono uppercase tracking-widest px-2 mb-3">Sesi Aktif</p>
+        {sessions.map(s => (
+          <NavLink
+            key={s.id}
+            to={`/sessions/${s.id}/answers`}
+            className={({ isActive }) =>
+              `block px-3 py-2.5 rounded text-sm transition-colors ${
+                isActive
+                  ? "bg-accent-dim text-accent font-medium"
+                  : "text-gray-400 hover:bg-surface2 hover:text-gray-200"
+              }`
+            }
+          >
+            <span className="font-mono text-xs text-missing mr-2">#{s.id}</span>
+            {s.name}
+          </NavLink>
+        ))}
+      </nav>
+
+      <div className="px-3 py-4 border-t border-border">
+        <NavLink
+          to="/sessions/new"
+          className="flex items-center justify-center w-full px-3 py-2 bg-accent-dim text-accent border border-accent/30 rounded text-sm font-medium hover:bg-accent hover:text-white transition-colors"
         >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+          + Sesi Baru
+        </NavLink>
+      </div>
+    </aside>
   )
 }
 
-export default App
+export default function App() {
+  return (
+    <BrowserRouter>
+      <div className="flex">
+        <Sidebar />
+        <main className="ml-64 flex-1 min-h-screen p-8">
+          <Routes>
+            <Route path="/" element={
+              <div className="flex items-center justify-center h-full text-missing font-mono text-sm mt-32">
+                ← pilih sesi atau buat yang baru
+              </div>
+            } />
+            <Route path="/sessions/new" element={<SessionNew />} />
+            <Route path="/sessions/:id/answers" element={<SessionAnswers />} />
+            <Route path="/sessions/:id/results" element={<SessionResults />} />
+          </Routes>
+        </main>
+      </div>
+    </BrowserRouter>
+  )
+}
