@@ -3,9 +3,9 @@ from sqlalchemy.orm import Session
 from datetime import datetime, timezone
 import json
 
-from backend.database import get_db
-from backend.models import Session as SessionModel, StudentAnswer
-from backend.services.groq_service import analyze_answer
+from database import get_db
+from models import Session as SessionModel, StudentAnswer
+from services.groq_service import analyze_answer
 
 router = APIRouter(prefix="/sessions/{session_id}/analyze", tags=["analysis"])
 
