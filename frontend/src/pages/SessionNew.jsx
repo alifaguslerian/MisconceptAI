@@ -1,49 +1,54 @@
-import { useState } from "react"
-import { useNavigate } from "react-router-dom"
-import axios from "axios"
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
-const API = "http://localhost:8000"
+const API = "http://localhost:8000";
 
 export default function SessionNew() {
-  const navigate = useNavigate()
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState("")
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
   const [form, setForm] = useState({
     name: "",
     question: "",
     ideal_answer: "",
     concepts: "",
-  })
+  });
 
   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value })
-  }
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async () => {
     if (!form.name || !form.question || !form.ideal_answer || !form.concepts) {
-      setError("Semua field wajib diisi.")
-      return
+      setError("Semua field wajib diisi.");
+      return;
     }
-    setError("")
-    setLoading(true)
+    setError("");
+    setLoading(true);
     try {
-      const res = await axios.post(`${API}/sessions/`, form)
-      navigate(`/sessions/${res.data.id}/answers`)
+      const res = await axios.post(`${API}/sessions/`, form);
+      navigate(`/sessions/${res.data.id}/answers`);
     } catch (e) {
-      setError("Gagal membuat sesi. Pastikan backend berjalan.")
+      setError("Gagal membuat sesi. Pastikan backend berjalan.");
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <div className="max-w-2xl mx-auto">
       {/* Header */}
       <div className="mb-8">
-        <p className="text-xs font-mono text-missing uppercase tracking-widest mb-1">Sesi Baru</p>
-        <h1 className="font-sora font-bold text-2xl text-white">Buat Sesi Analisis</h1>
+        <p className="text-xs font-mono text-missing uppercase tracking-widest mb-1">
+          Sesi Baru
+        </p>
+        <h1 className="font-sora font-bold text-2xl text-white">
+          Buat Sesi Analisis
+        </h1>
         <p className="text-sm text-gray-500 mt-1">
-          Isi soal, konsep yang diuji, dan jawaban ideal sebagai acuan analisis AI.
+          Isi soal, konsep yang diuji, dan jawaban ideal sebagai acuan analisis
+          AI.
         </p>
       </div>
 
@@ -90,7 +95,9 @@ export default function SessionNew() {
             placeholder="rekursi, base case, stack overflow, call stack"
             className="w-full bg-surface2 border border-border rounded px-4 py-2.5 text-sm text-white placeholder-gray-600 focus:outline-none focus:border-accent transition-colors font-mono"
           />
-          <p className="text-xs text-gray-600 mt-1.5">Pisahkan dengan koma. Urutan menentukan kolom heatmap.</p>
+          <p className="text-xs text-gray-600 mt-1.5">
+            Pisahkan dengan koma. Urutan menentukan kolom heatmap.
+          </p>
         </div>
 
         {/* Jawaban Ideal */}
@@ -109,9 +116,7 @@ export default function SessionNew() {
         </div>
 
         {/* Error */}
-        {error && (
-          <p className="text-xs text-incorrect font-mono">{error}</p>
-        )}
+        {error && <p className="text-xs text-incorrect font-mono">{error}</p>}
 
         {/* Submit */}
         <button
@@ -123,5 +128,5 @@ export default function SessionNew() {
         </button>
       </div>
     </div>
-  )
+  );
 }
